@@ -1,25 +1,41 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
-  Box,
   Container,
+  Paper,
+  Box,
+  Typography,
   TextField,
   Button,
-  Typography,
-  Paper,
   Alert,
   CircularProgress,
 } from '@mui/material';
-import { signupAction } from './actions';
+import { loginAction } from './actions';
 
-export default function SignupPage() {
-  const [error, setError] = useState('');
+function LoginForm() {
+  const [error, setError] = useState<string>('');
+  const [successMessage, setSuccessMessage] = useState<string>('');
   const [isPending, startTransition] = useTransition();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get('registered') === 'true') {
+      setSuccessMessage('Registration successful! You can now sign in.');
+
+      setTimeout(() => {
+        window.history.replaceState({}, '', '/auth/login');
+      }, 5000);
+    }
+  }, [searchParams]);
 
   function handleInputChange() {
     if (error) {
       setError('');
+    }
+    if (successMessage) {
+      setSuccessMessage('');
     }
   }
 
@@ -27,7 +43,7 @@ export default function SignupPage() {
     setError('');
 
     startTransition(async () => {
-      const result = await signupAction(formData);
+      const result = await loginAction(formData);
 
       if (result && !result.success) {
         setError(result.error);
@@ -40,8 +56,14 @@ export default function SignupPage() {
       <Box sx={{ mt: 8, mb: 4 }}>
         <Paper sx={{ p: 4 }}>
           <Typography variant="h4" component="h1" gutterBottom align="center">
-            Sign Up
+            Log In
           </Typography>
+
+          {successMessage && (
+            <Alert severity="success" sx={{ mb: 2 }}>
+              {successMessage}
+            </Alert>
+          )}
 
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
@@ -68,7 +90,6 @@ export default function SignupPage() {
               fullWidth
               required
               margin="normal"
-              helperText="Password must be at least 6 characters long"
               disabled={isPending}
               onChange={handleInputChange}
             />
@@ -85,17 +106,33 @@ export default function SignupPage() {
                 ) : null
               }
             >
-              {isPending ? 'Signing up...' : 'Sign Up'}
+              {isPending ? 'Signing in...' : 'Sign In'}
             </Button>
           </Box>
 
           <Box sx={{ textAlign: 'center', mt: 2 }}>
             <Typography variant="body2">
-              Already have an account? <a href="/auth/login">Sign in</a>
+              Don&apos;t have an account? <a href="/auth/signup">Sign up</a>
             </Typography>
           </Box>
         </Paper>
       </Box>
     </Container>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <Container maxWidth="sm">
+          <Box sx={{ mt: 8, mb: 4, textAlign: 'center' }}>
+            <CircularProgress />
+          </Box>
+        </Container>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }

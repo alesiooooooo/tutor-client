@@ -2,13 +2,13 @@
 
 import { redirect } from 'next/navigation';
 
-export async function signupAction(formData: FormData) {
+export async function loginAction(formData: FormData) {
   const data = Object.fromEntries(formData);
 
   const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
 
   try {
-    const response = await fetch(`${apiBaseUrl}/auth/signup`, {
+    const response = await fetch(`${apiBaseUrl}/auth/login`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' },
@@ -17,7 +17,7 @@ export async function signupAction(formData: FormData) {
     if (!response.ok) {
       const errorData = await response.json();
 
-      let errorMessage = 'Registration failed';
+      let errorMessage = 'Login failed';
 
       if (errorData.message) {
         if (Array.isArray(errorData.message)) {
@@ -36,7 +36,8 @@ export async function signupAction(formData: FormData) {
     }
 
     const result = await response.json();
-    console.log('Registration successful:', result);
+    console.log('Login successful:', result);
+
   } catch (error) {
     return {
       success: false,
@@ -44,5 +45,5 @@ export async function signupAction(formData: FormData) {
     };
   }
 
-  redirect('/auth/login?registered=true');
+  redirect('/dashboard');
 }
