@@ -55,7 +55,13 @@ export default function CreateBookingModal({
         }}
       >
         <DialogTitle sx={{ pb: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
             Book a New Lesson
             <IconButton
               onClick={handleClose}
