@@ -1,86 +1,68 @@
-'use client';
-
-import { useState } from 'react';
+import { Suspense } from 'react';
 import {
   Container,
-  Typography,
   Paper,
   Box,
-  Button,
-  Alert,
+  CircularProgress,
+  Typography,
+  Divider,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import { logoutAction } from '../auth/logout/actions';
-import CreateBookingDialog from './booking/CreateBookingDialog';
+import BookingListServer from './booking/BookingListServer';
+import DashboardClient from './DashboardClient';
+import CreateBookingModal from './booking/CreateBookingModal';
+import { getTutorsAction } from './booking/actions';
+
+async function BookingSection() {
+  const tutorsResult = await getTutorsAction();
+
+  return (
+    <CreateBookingModal
+      tutors={tutorsResult.success ? tutorsResult.tutors || [] : []}
+      tutorsError={tutorsResult.success ? undefined : tutorsResult.error}
+    />
+  );
+}
 
 export default function DashboardPage() {
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string>('');
-
-  const handleCreateBooking = () => {
-    setDialogOpen(true);
-  };
-
-  const handleDialogClose = () => {
-    setDialogOpen(false);
-  };
-
-  const handleBookingSuccess = () => {
-    setSuccessMessage('Lesson booked successfully!');
-    setTimeout(() => {
-      setSuccessMessage('');
-    }, 5000);
-  };
-
   return (
     <Container maxWidth="md">
       <Box sx={{ mt: 8, mb: 4 }}>
         <Paper sx={{ p: 4 }}>
+          <DashboardClient />
+
           <Box
             sx={{
+              mb: 4,
               display: 'flex',
-              justifyContent: 'space-between',
               alignItems: 'center',
-              mb: 3,
+              justifyContent: 'space-between',
             }}
           >
-            <Typography variant="h4" component="h1">
-              Dashboard
-            </Typography>
-
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleCreateBooking}
-              sx={{ borderRadius: 2 }}
+            <Typography variant="h5">My Bookings</Typography>
+            <Suspense
+              fallback={
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <CircularProgress size={24} />
+                </Box>
+              }
             >
-              Book a Lesson
-            </Button>
+              <BookingSection />
+            </Suspense>
           </Box>
 
-          {successMessage && (
-            <Alert severity="success" sx={{ mb: 3 }}>
-              {successMessage}
-            </Alert>
-          )}
-
-          <Typography variant="body1" sx={{ mb: 3 }}>
-            Welcome! You are successfully logged in.
-          </Typography>
-
-          <form action={logoutAction}>
-            <Button type="submit" variant="outlined" color="secondary">
-              Logout
-            </Button>
-          </form>
+          <Box>
+            <Suspense
+              fallback={
+                <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                  <CircularProgress />
+                </Box>
+              }
+            >
+              <BookingListServer />
+            </Suspense>
+          </Box>
         </Paper>
       </Box>
-
-      <CreateBookingDialog
-        open={dialogOpen}
-        onClose={handleDialogClose}
-        onSuccess={handleBookingSuccess}
-      />
     </Container>
   );
 }
