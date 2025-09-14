@@ -58,8 +58,8 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT 3000
-# set hostname to localhost
-ENV HOSTNAME "0.0.0.0"
+# set hostname to IPv4 localhost to avoid IPv6 issues
+ENV HOSTNAME "127.0.0.1"
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
