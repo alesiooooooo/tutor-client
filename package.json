@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "docker-start": "docker compose up",
+    "docker-build": "docker compose up --build",
+    "docker-stop": "docker compose down"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
