@@ -1,6 +1,7 @@
 'use server';
 
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
 export async function loginAction(formData: FormData) {
   const data = Object.fromEntries(formData);
@@ -37,6 +38,16 @@ export async function loginAction(formData: FormData) {
 
     const result = await response.json();
     console.log('Login successful:', result);
+
+
+    const cookieStore = await cookies();
+    cookieStore.set('auth-token', result.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: '/'
+    });
 
   } catch (error) {
     return {
