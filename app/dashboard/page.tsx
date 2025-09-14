@@ -5,7 +5,6 @@ import {
   Box,
   CircularProgress,
   Typography,
-  Divider,
 } from '@mui/material';
 import BookingListServer from './booking/BookingListServer';
 import DashboardClient from './DashboardClient';

@@ -1,0 +1,20 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - API_BASE_URL=http://host.docker.internal:3010
+      # Add your environment variables here
+    volumes:
+      # Mount .env.local for local development overrides
+      - ./.env.local:/app/.env.local:ro
+    restart: unless-stopped
+    container_name: tutors-client
+
+networks:
+  default:
+    name: tutors-network

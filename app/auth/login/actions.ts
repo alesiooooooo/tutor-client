@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 export async function loginAction(formData: FormData) {
   const data = Object.fromEntries(formData);
 
-  const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
+  const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:8080';
 
   try {
     const response = await fetch(`${apiBaseUrl}/auth/login`, {

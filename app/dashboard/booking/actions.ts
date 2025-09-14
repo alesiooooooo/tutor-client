@@ -50,7 +50,7 @@ export async function getBookingsAction(): Promise<GetBookingsResult> {
   }
 
   try {
-    const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
+    const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:8080';
     const apiUrl = `${apiBaseUrl}/booking`;
 
     const response = await fetch(apiUrl, {
@@ -91,7 +91,7 @@ export async function getTutorsAction(): Promise<GetTutorsResult> {
   }
 
   try {
-    const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
+    const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:8080';
     const apiUrl = `${apiBaseUrl}/tutor`;
 
     const response = await fetch(apiUrl, {
@@ -179,7 +179,7 @@ export async function createBookingAction(
       endTime: endTime as string,
     };
 
-    const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
+    const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:8080';
     const apiUrl = `${apiBaseUrl}/booking`;
 
     const response = await fetch(apiUrl, {
@@ -227,7 +227,7 @@ export async function deleteBookingAction(
   }
 
   try {
-    const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
+    const apiBaseUrl = process.env.API_BASE_URL || 'http://localhost:8080';
     const apiUrl = `${apiBaseUrl}/booking/${bookingId}`;
 
     const response = await fetch(apiUrl, {
