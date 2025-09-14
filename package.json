@@ -9,7 +9,10 @@
     "lint": "eslint",
     "docker-start": "docker compose up",
     "docker-build": "docker compose up --build",
-    "docker-stop": "docker compose down"
+    "docker-stop": "docker compose down",
+    "docker-start-mac": "docker compose -f docker-compose.mac.yml up",
+    "docker-build-mac": "docker compose -f docker-compose.mac.yml up --build",
+    "docker-stop-mac": "docker compose -f docker-compose.mac.yml down"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

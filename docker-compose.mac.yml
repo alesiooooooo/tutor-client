@@ -7,7 +7,7 @@ services:
       - '3009:3000'
     environment:
       - NODE_ENV=production
-      - API_BASE_URL=http://172.17.0.1:3010
+      - API_BASE_URL=http://host.docker.internal:3010
       # Add your environment variables here
     volumes:
       # Mount .env.local for local development overrides
